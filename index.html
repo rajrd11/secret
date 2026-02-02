@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Will You Be My Valentine?</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❤️</text></svg>">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        :root {
+            --primary-red: #e63946;
+            --secondary-gray: #6d6875;
+            --bg-gradient: linear-gradient(135deg, #ffafbd, #ffc3a0);
+            --card-bg: rgba(255, 255, 255, 0.95);
+        }
+        
+        body {
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            touch-action: manipulation;
+        }
+        
+        html {
+            height: -webkit-fill-available;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            padding: clamp(20px, 5vw, 40px);
+            background-color: var(--card-bg);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            z-index: 10;
+            position: relative;
+            animation: fadeIn 1.5s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+        
+        h1 {
+            color: var(--primary-red);
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            margin-bottom: clamp(15px, 4vw, 25px);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            line-height: 1.2;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        
+        .subtitle {
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            color: var(--secondary-gray);
+            margin-bottom: clamp(30px, 8vw, 50px);
+            line-height: 1.4;
+            font-weight: 500;
+        }
+        
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: clamp(20px, 5vw, 40px);
+            margin-top: clamp(30px, 8vw, 50px);
+            flex-wrap: wrap;
+            position: relative;
+            min-height: 120px;
+        }
+        
+        .btn {
+            padding: clamp(18px, 4vw, 22px) clamp(40px, 8vw, 60px);
+            font-size: clamp(1.5rem, 5vw, 2rem);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-weight: 700;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            flex-shrink: 0;
+            -webkit-appearance: none;
+            appearance: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn:active {
+            transform: scale(0.95);
+        }
+        
+        .yes-btn {
+            background-color: var(--primary-red);
+            color: white;
+            z-index: 5;
+        }
+        
+        .yes-btn:hover, .yes-btn:active {
+            background-color: #d62839;
+            transform: translateY(-5px) scale(0.98);
+            box-shadow: 0 15px 30px rgba(214, 40, 57, 0.4);
+        }
+        
+        .no-btn {
+            background-color: var(--secondary-gray);
+            color: white;
+            position: absolute;
+            z-index: 4;
+            transition: left 0.3s ease, top 0.3s ease;
+        }
+        
+        .no-btn:hover, .no-btn:active {
+            background-color: #5a5566;
+        }
+        
+        .message {
+            display: none;
+            margin-top: clamp(30px, 8vw, 50px);
+            padding: clamp(20px, 5vw, 30px);
+            background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+            border-radius: 25px;
+            animation: fadeIn 0.8s ease;
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+        
+        .message h2 {
+            color: var(--primary-red);
+            font-size: clamp(1.8rem, 6vw, 2.8rem);
+            margin-bottom: clamp(15px, 4vw, 25px);
+            line-height: 1.3;
+        }
+        
+        .message p {
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
+            color: var(--secondary-gray);
+            margin-bottom: clamp(10px, 3vw, 15px);
+            line-height: 1.4;
+        }
+        
+        .heart-icon {
+            color: var(--primary-red);
+            font-size: clamp(2.5rem, 6vw, 3.5rem);
+            margin: clamp(5px, 2vw, 10px);
+            animation: heartbeat 1.5s infinite;
+            display: inline-block;
+        }
+        
+        /* Heart balloons optimized for mobile */
+        .heart-balloon {
+            position: absolute;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            color: var(--primary-red);
+            z-index: 1;
+            animation: float 8s ease-in-out infinite;
+            filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.15));
+            pointer-events: none;
+            will-change: transform;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+        
+        /* Optimized float animation for better performance */
+        @keyframes float {
+            0%, 100% {
+                transform: translate3d(0, 0, 0) rotate(0deg);
+            }
+            50% {
+                transform: translate3d(0, -30px, 0) rotate(5deg);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        /* Celebration confetti */
+        .confetti {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: var(--primary-red);
+            border-radius: 50%;
+            opacity: 0;
+            z-index: 2;
+            pointer-events: none;
+        }
+        
+        /* Safe area adjustments for iPhone notch */
+        @supports(padding: max(0px)) {
+            body {
+                padding-left: max(20px, env(safe-area-inset-left));
+                padding-right: max(20px, env(safe-area-inset-right));
+                padding-top: max(20px, env(safe-area-inset-top));
+                padding-bottom: max(20px, env(safe-area-inset-bottom));
+            }
+        }
+        
+        /* iPad specific optimizations */
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .container {
+                max-width: 700px;
+                padding: 40px;
+            }
+            
+            h1 {
+                font-size: 3.5rem;
+            }
+            
+            .btn {
+                padding: 22px 60px;
+                font-size: 2rem;
+            }
+            
+            .buttons-container {
+                min-height: 150px;
+            }
+        }
+        
+        /* iPhone landscape optimization */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .container {
+                padding: 15px;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+            
+            h1 {
+                font-size: 2rem;
+                margin-bottom: 10px;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+                margin-bottom: 20px;
+            }
+            
+            .buttons-container {
+                margin-top: 20px;
+                min-height: 80px;
+            }
+            
+            .btn {
+                padding: 12px 30px;
+                font-size: 1.5rem;
+            }
+        }
+        
+        /* Reduce motion for accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            .heart-balloon, .heart-icon {
+                animation: none;
+            }
+            
+            .btn {
+                transition: none;
+            }
+        }
+        
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --card-bg: rgba(30, 30, 35, 0.95);
+                --secondary-gray: #b8b5c0;
+            }
+            
+            body {
+                background: linear-gradient(135deg, #8a2c3d, #8f5c47);
+            }
+            
+            .message {
+                background: linear-gradient(135deg, #8a2c3d, #8f5c47);
+            }
+        }
+        
+        /* Prevent text selection on buttons */
+        .btn {
+            user-select: none;
+            -webkit-user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Heart balloons -->
+    <div class="heart-balloon" style="top: 10%; left: 5%; animation-delay: 0s; font-size: 2.8rem;"><i class="fas fa-heart"></i></div>
+    <div class="heart-balloon" style="top: 15%; right: 8%; animation-delay: 1s; font-size: 2rem;"><i class="fas fa-heart"></i></div>
+    <div class="heart-balloon" style="bottom: 25%; left: 10%; animation-delay: 2s; font-size: 2.5rem;"><i class="fas fa-heart"></i></div>
+    <div class="heart-balloon" style="bottom: 15%; right: 5%; animation-delay: 3s; font-size: 3rem;"><i class="fas fa-heart"></i></div>
+    <div class="heart-balloon" style="top: 40%; left: 3%; animation-delay: 4s; font-size: 2.2rem;"><i class="fas fa-heart"></i></div>
+    <div class="heart-balloon" style="top: 35%; right: 12%; animation-delay: 5s; font-size: 2.7rem;"><i class="fas fa-heart"></i></div>
+    
+    <div class="container">
+        <h1>Will You Be My Valentine?</h1>
+        <p class="subtitle">I have a very special question for you...</p>
+        
+        <div class="buttons-container">
+            <button class="btn yes-btn" id="yesBtn">YES! <i class="fas fa-heart"></i></button>
+            <button class="btn no-btn" id="noBtn">No</button>
+        </div>
+        
+        <div class="message" id="message">
+            <h2>I knew you'd say YES! <i class="fas fa-heart heart-icon"></i></h2>
+            <p>Can't wait to celebrate with you!</p>
+            <p>I'll meet you on February 14th at 6 PM, cutie!</p>
+            <p>You've made me the happiest person today!</p>
+            <div style="margin-top: 20px;">
+                <i class="fas fa-heart heart-icon"></i>
+                <i class="fas fa-heart heart-icon"></i>
+                <i class="fas fa-heart heart-icon"></i>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+            const message = document.getElementById('message');
+            const buttonsContainer = document.querySelector('.buttons-container');
+            const body = document.body;
+            
+            // Set initial position for "No" button
+            let noBtnPosition = { x: 0, y: 0 };
+            updateNoButtonPosition();
+            
+            // Handle window resize for responsive button positioning
+            window.addEventListener('resize', updateNoButtonPosition);
+            
+            // Function to update "No" button position based on container size
+            function updateNoButtonPosition() {
+                const containerWidth = buttonsContainer.offsetWidth;
+                const containerHeight = buttonsContainer.offsetHeight;
+                const buttonWidth = noBtn.offsetWidth;
+                const buttonHeight = noBtn.offsetHeight;
+                
+                // Generate random position within container bounds
+                const maxX = containerWidth - buttonWidth - 20;
+                const maxY = containerHeight - buttonHeight - 20;
+                
+                noBtnPosition.x = Math.floor(Math.random() * maxX);
+                noBtnPosition.y = Math.floor(Math.random() * maxY);
+                
+                // Apply the position
+                noBtn.style.left = `${noBtnPosition.x}px`;
+                noBtn.style.top = `${noBtnPosition.y}px`;
+            }
+            
+            // iOS touch events for the "No" button
+            noBtn.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                moveButton();
+                
+                // Haptic feedback for iOS devices
+                if (window.navigator.vibrate) {
+                    window.navigator.vibrate(10);
+                }
+            });
+            
+            noBtn.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                
+                // Add some fun text changes
+                const texts = ['Are you sure?', 'Really?', 'Think again!', 'Please?', 'Just click YES!', 'Try again!', 'Oops!', 'Missed me!'];
+                const randomText = texts[Math.floor(Math.random() * texts.length)];
+                noBtn.textContent = randomText;
+                
+                // Make the YES button bigger temporarily
+                yesBtn.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    yesBtn.style.transform = 'scale(1)';
+                }, 300);
+            });
+            
+            // Also support hover for desktop
+            noBtn.addEventListener('mouseover', moveButton);
+            
+            // Function to move the "No" button randomly
+            function moveButton() {
+                const containerWidth = buttonsContainer.offsetWidth;
+                const containerHeight = buttonsContainer.offsetHeight;
+                const buttonWidth = noBtn.offsetWidth;
+                const buttonHeight = noBtn.offsetHeight;
+                
+                // Generate new random position
+                const maxX = containerWidth - buttonWidth - 20;
+                const maxY = containerHeight - buttonHeight - 20;
+                
+                noBtnPosition.x = Math.floor(Math.random() * maxX);
+                noBtnPosition.y = Math.floor(Math.random() * maxY);
+                
+                // Apply smooth transition
+                noBtn.style.transition = 'left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                noBtn.style.left = `${noBtnPosition.x}px`;
+                noBtn.style.top = `${noBtnPosition.y}px`;
+                
+                // Remove transition after animation completes
+                setTimeout(() => {
+                    noBtn.style.transition = '';
+                }, 400);
+            }
+            
+            // When clicking the "Yes" button
+            yesBtn.addEventListener('click', showCelebration);
+            yesBtn.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                showCelebration();
+            });
+            
+            function showCelebration() {
+                // Hide the buttons
+                yesBtn.style.display = 'none';
+                noBtn.style.display = 'none';
+                
+                // Show the message
+                message.style.display = 'block';
+                
+                // Create celebration confetti
+                createConfetti();
+                
+                // Add more heart balloons
+                for(let i = 0; i < 8; i++) {
+                    setTimeout(() => createHeartBalloon(), i * 200);
+                }
+                
+                // Change background to a more celebratory color
+                body.style.background = 'linear-gradient(135deg, #ffafbd, #ffc3a0, #a2d2ff)';
+                
+                // Scroll to message on mobile
+                message.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+            
+            // Create celebration confetti
+            function createConfetti() {
+                const colors = ['#e63946', '#ffafbd', '#ffc3a0', '#a2d2ff', '#ffd166'];
+                
+                for(let i = 0; i < 50; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.left = `${Math.random() * 100}vw`;
+                    confetti.style.top = `${Math.random() * 100}vh`;
+                    confetti.style.opacity = '1';
+                    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    
+                    // Random size
+                    const size = 5 + Math.random() * 15;
+                    confetti.style.width = `${size}px`;
+                    confetti.style.height = `${size}px`;
+                    
+                    // Random shape
+                    if (Math.random() > 0.5) {
+                        confetti.style.borderRadius = '50%';
+                    } else {
+                        confetti.style.borderRadius = '0';
+                    }
+                    
+                    body.appendChild(confetti);
+                    
+                    // Animate confetti falling
+                    const animation = confetti.animate([
+                        { transform: `translate3d(0, 0, 0) rotate(0deg)`, opacity: 1 },
+                        { transform: `translate3d(${Math.random() * 100 - 50}px, 100vh, 0) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+                    ], {
+                        duration: 1500 + Math.random() * 2000,
+                        easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)'
+                    });
+                    
+                    // Remove confetti after animation
+                    animation.onfinish = () => confetti.remove();
+                }
+            }
+            
+            // Create additional heart balloons
+            function createHeartBalloon() {
+                const balloon = document.createElement('div');
+                balloon.className = 'heart-balloon';
+                balloon.innerHTML = '<i class="fas fa-heart"></i>';
+                
+                // Random position
+                const randomLeft = Math.random() * 100;
+                const randomTop = Math.random() * 100;
+                const randomSize = 1.5 + Math.random() * 2.5;
+                const randomDuration = 6 + Math.random() * 8;
+                const randomDelay = Math.random() * 5;
+                
+                balloon.style.left = `${randomLeft}%`;
+                balloon.style.top = `${randomTop}%`;
+                balloon.style.fontSize = `${randomSize}rem`;
+                balloon.style.animationDuration = `${randomDuration}s`;
+                balloon.style.animationDelay = `${randomDelay}s`;
+                
+                body.appendChild(balloon);
+            }
+            
+            // Prevent context menu on long press
+            document.addEventListener('contextmenu', function(e) {
+                if (e.target.classList.contains('btn')) {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
