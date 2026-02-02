@@ -156,6 +156,35 @@
             line-height: 1.4;
         }
         
+        .photo-container {
+            margin: 25px 0;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            max-width: 100%;
+        }
+        
+        .our-photo {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 15px;
+            border: 8px solid white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .photo-caption {
+            font-style: italic;
+            color: var(--primary-red);
+            margin-top: 15px;
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
+            font-weight: 600;
+        }
+        
         .heart-icon {
             color: var(--primary-red);
             font-size: clamp(2.5rem, 6vw, 3.5rem);
@@ -268,6 +297,11 @@
                 padding: 12px 30px;
                 font-size: 1.5rem;
             }
+            
+            .photo-container {
+                margin: 15px 0;
+                padding: 10px;
+            }
         }
         
         /* Reduce motion for accessibility */
@@ -294,6 +328,10 @@
             
             .message {
                 background: linear-gradient(135deg, #8a2c3d, #8f5c47);
+            }
+            
+            .photo-container {
+                background-color: rgba(40, 40, 45, 0.7);
             }
         }
         
@@ -326,7 +364,16 @@
             <h2>I knew you'd say YES! <i class="fas fa-heart heart-icon"></i></h2>
             <p>Can't wait to celebrate with you!</p>
             <p>I'll meet you on February 14th at 6 PM, cutie!</p>
-            <p>You've made me the happiest person today!</p>
+            
+            <!-- Photo Section -->
+            <div class="photo-container">
+                <!-- REPLACE THIS IMAGE URL WITH YOUR ACTUAL PHOTO -->
+                <img src="https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
+                     alt="Our First Photo Together" 
+                     class="our-photo">
+                <p class="photo-caption">Our first photo together 💖</p>
+            </div>
+            
             <div style="margin-top: 20px;">
                 <i class="fas fa-heart heart-icon"></i>
                 <i class="fas fa-heart heart-icon"></i>
@@ -522,6 +569,11 @@
                     e.preventDefault();
                 }
             });
+            
+            // Preload the image for better user experience
+            const photo = document.querySelector('.our-photo');
+            const img = new Image();
+            img.src = photo.src;
         });
     </script>
 </body>
