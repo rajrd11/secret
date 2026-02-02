@@ -249,6 +249,31 @@
             }
         }
         
+        /* Photo upload instructions */
+        .photo-instructions {
+            background-color: rgba(230, 57, 70, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 1rem;
+            color: #6d6875;
+            text-align: left;
+            display: none;
+        }
+        
+        .photo-instructions h3 {
+            color: #e63946;
+            margin-bottom: 10px;
+        }
+        
+        .photo-instructions ol {
+            margin-left: 20px;
+        }
+        
+        .photo-instructions li {
+            margin-bottom: 8px;
+        }
+        
         /* iPad specific optimizations */
         @media (min-width: 768px) and (max-width: 1024px) {
             .container {
@@ -367,11 +392,26 @@
             
             <!-- Photo Section -->
             <div class="photo-container">
-                <!-- REPLACE THIS IMAGE URL WITH YOUR ACTUAL PHOTO -->
-                <img src="https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
+                <!-- 
+                    REPLACE THIS URL WITH YOUR PHOTO URL!
+                    Upload your photo to GitHub and paste the URL here
+                -->
+                <img src="https://github.com/rajrd11/secret/blob/main/first.jpeg" 
                      alt="Our First Photo Together" 
-                     class="our-photo">
+                     class="our-photo"
+                     id="valentinePhoto">
                 <p class="photo-caption">Our first photo together 💖</p>
+            </div>
+            
+            <!-- Photo Upload Instructions (hidden by default) -->
+            <div class="photo-instructions" id="photoInstructions">
+                <h3>📸 How to Add Your Photo:</h3>
+                <ol>
+                    <li>Upload your photo to your GitHub repository</li>
+                    <li>Get the direct URL (right-click photo → "Copy Image Address")</li>
+                    <li>Replace the photo URL in the code</li>
+                </ol>
+                <p><strong>Current placeholder URL:</strong> <span id="currentPhotoUrl"></span></p>
             </div>
             
             <div style="margin-top: 20px;">
@@ -389,6 +429,26 @@
             const message = document.getElementById('message');
             const buttonsContainer = document.querySelector('.buttons-container');
             const body = document.body;
+            const valentinePhoto = document.getElementById('valentinePhoto');
+            const photoInstructions = document.getElementById('photoInstructions');
+            const currentPhotoUrl = document.getElementById('currentPhotoUrl');
+            
+            // Show current photo URL for easy replacement
+            currentPhotoUrl.textContent = valentinePhoto.src;
+            
+            // Check if placeholder photo is being used
+            function checkPhotoSource() {
+                const currentSrc = valentinePhoto.src;
+                const isPlaceholder = currentSrc.includes('unsplash') || 
+                                     currentSrc.includes('YOUR_USERNAME') ||
+                                     currentSrc.includes('placeholder');
+                
+                if (isPlaceholder) {
+                    photoInstructions.style.display = 'block';
+                }
+            }
+            
+            checkPhotoSource();
             
             // Set initial position for "No" button
             let noBtnPosition = { x: 0, y: 0 };
@@ -570,10 +630,13 @@
                 }
             });
             
-            // Preload the image for better user experience
-            const photo = document.querySelector('.our-photo');
-            const img = new Image();
-            img.src = photo.src;
+            // Handle photo loading errors
+            valentinePhoto.onerror = function() {
+                // If the photo fails to load, show instructions
+                photoInstructions.style.display = 'block';
+                valentinePhoto.src = 'https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80';
+                currentPhotoUrl.textContent = '⚠️ Photo failed to load. Please check the URL.';
+            };
         });
     </script>
 </body>
